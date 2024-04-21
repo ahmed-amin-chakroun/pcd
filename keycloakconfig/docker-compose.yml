@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  mysql:
+    container_name: db
+    image: mysql:8.0.36
+    command: '--default-authentication-plugin=mysql_native_password'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 30s
+      retries: 10
+    environment:
+      MYSQL_DATABASE: keycloak
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - local
+    ports:
+      - "3306:3306"
+    volumes:
+      - "mysql_data:/var/lib/mysql"
+
+  keycloak:
+    container_name: keycloak
+    build:
+      context: .
+      args:
+        KEYCLOAK_VERSION: 24.0.3
+    command: ['start', '--optimized', '--import-realm']
+    depends_on:
+      - "mysql"
+    environment:
+      JAVA_OPTS_APPEND: -Dkeycloak.profile.feature.upload_scripts=enabled
+      KC_DB_PASSWORD: password
+      KC_DB_URL: jdbc:mysql://mysql:3306/keycloak?useSSL=false
+      KC_DB_USERNAME: root
+      KC_HEALTH_ENABLED: 'true'
+      KC_HTTP_ENABLED: 'true'
+      KC_METRICS_ENABLED: 'true'
+      KC_HOSTNAME_URL: http://localhost:8180
+      KC_PROXY: reencrypt
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8180:8080"
+      - "8787:8787" # debug port
+    networks:
+      - local
+    
+networks:
+  local:
+    driver: bridge
+
+volumes:
+  mysql_data:
