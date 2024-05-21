@@ -1,4 +1,4 @@
-package com.example.keycloakbackend.jwt;
+package com.example.keycloakbackend.keycloak.jwt;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;

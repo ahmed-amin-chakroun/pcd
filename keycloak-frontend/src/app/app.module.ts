@@ -25,7 +25,7 @@ import { IdentificationComponent } from './identification/identification.compone
     HttpClientModule,
     OAuthModule.forRoot({
       resourceServer: {
-          allowedUrls: ['http://localhost:8180/foo'],
+          allowedUrls: ['http://localhost:8180/allproducts'],
           sendAccessToken: true
       }
   })

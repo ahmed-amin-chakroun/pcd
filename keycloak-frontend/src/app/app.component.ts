@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthConfig, OAuthService, NullValidationHandler } from 'angular-oauth2-oidc';
+import { AuthConfig, OAuthService, NullValidationHandler, provideOAuthClient } from 'angular-oauth2-oidc';
+import { ApplicationConfig } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ export class AppComponent {
     this.configure();
   }
   authConfig: AuthConfig = {
-    issuer: 'http://localhost:8080/auth/realms/myrealm',
+    issuer: 'http://localhost:8080/realms/TnConsume',
     redirectUri: window.location.origin,
     clientId: 'Frontend',
     responseType: 'code',
